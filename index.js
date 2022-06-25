@@ -51,6 +51,25 @@ app.post('/computer', async(req, res) =>{
 })
 
 
+app.put('/computer/:id', async(req,res)=>{
+  const id = req.params.id;
+  const computerProduct = req.body;
+  const filter ={_id: ObjectId(id)}
+  const options = { upsert: true };
+  const updateDoc = {
+    $set: {
+      name:computerProduct.name,
+      price:computerProduct.price,
+      quantity:computerProduct.quantity,
+      img:computerProduct.img
+    },
+  };
+
+  const result = await computerCollection.updateOne(filter, updateDoc, options)
+  res.send(result)
+})
+
+
 app.delete('/computer/:id', async(req, res)=>{
   const id= req.params.id;
   const query= {_id: ObjectId(id)};

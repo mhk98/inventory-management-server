@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 require('dotenv').config()
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -35,11 +35,12 @@ async function run(){
 
         //GET
         app.get('/computer/:id', async(req, res)=>{
-            const id= req.params.id;
-            const query = {_id: ObjectId(id)};
-            const computer = await computerCollection.findOne(query);
-            res.send(computer)
-        } )
+          const id= req.params.id;
+          const query = {_id: ObjectId(id)};
+          const computer = await computerCollection.findOne(query);
+          res.send(computer)
+        })
+
 
 
 //POST
@@ -50,13 +51,13 @@ app.post('/computer', async(req, res) =>{
 })
 
 
-// app.delete('/cloth/:id', async(req, res)=>{
-//   const id= req.params.id;
-//   const query= {_id: ObjectId(id)};
-//   const result = await clothCollection.deleteOne(query);
-//   res.send(result)
+app.delete('/computer/:id', async(req, res)=>{
+  const id= req.params.id;
+  const query= {_id: ObjectId(id)};
+  const result = await computerCollection.deleteOne(query);
+  res.send(result)
 
-// })
+})
 
 
 app.get('/cloth', async (req, res)=>{
@@ -71,7 +72,7 @@ app.get('/cloth/:id', async(req, res)=>{
   const id= req.params.id;
   const query = {_id: ObjectId(id)};
   const cloth = await clothCollection.findOne(query);
-  res.send(computer)
+  res.send(cloth)
 })
 
 
@@ -80,6 +81,32 @@ app.post('/cloth', async(req, res)=>{
   const result = await clothCollection.insertOne(product);
   res.send(result)
   
+})
+
+app.put('/cloth/:id', async(req,res)=>{
+  const id = req.params.id;
+  const clothProduct = req.body;
+  const filter ={_id: ObjectId(id)}
+  const options = { upsert: true };
+  const updateDoc = {
+    $set: {
+      name:clothProduct.name,
+      price:clothProduct.price,
+      quantity:clothProduct.quantity,
+      img:clothProduct.img
+    },
+  };
+
+  const result = await clothCollection.updateOne(filter, updateDoc, options)
+  res.send(result)
+})
+
+app.delete('/cloth/:id', async(req, res)=>{
+  const id= req.params.id;
+  const query= {_id: ObjectId(id)};
+  const result = await clothCollection.deleteOne(query);
+  res.send(result)
+
 })
 
     }
